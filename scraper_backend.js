@@ -2,34 +2,30 @@ const express = require('express');
 const mongoose = require('mongoose');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const xml2js = require('xml2js');
 
 const PORT = 3000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/news-scraper';
+const MONGO_URI = '';
+
+const SCRAPE_DELAY_MS = 5000; // Delay between *sites* (if you add more)
+const ARTICLE_DELAY_MS = 2000; // Delay between *article detail fetches* to be polite
+
 const NEWS_URLS = [
     { name: 'BioPharma Dive', url: 'https://www.biopharmadive.com/' },
-    // { name: 'Endpoints News', url: 'https://endpoints.news/' }, // Add other sites here...
-    // { name: 'STAT Pharma', url: 'https://www.statnews.com/' },
 ];
-
-const SCRAPE_DELAY_MS = 3000; 
-const ARTICLE_DELAY_MS = 500; 
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
 mongoose.connect(MONGO_URI)
-    .then(() => console.log('MongoDB connection successful.'))
+    .then(() => console.log('MongoDB connection successful.', MONGO_URI))
     .catch(err => console.error('MongoDB connection error:', err));
 
 const articleSchema = new mongoose.Schema({
     author: { type: String, required: false },
     date: { type: Date, required: false },
-    extract: { type: String, required: true }, 
+    extract: { type: String, required: true },
     link: { type: String, required: true, unique: true },
     source: { type: String, required: true },
     scrapedAt: { type: Date, default: Date.now }
@@ -37,22 +33,14 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model('Article', articleSchema);
 
-
-/**
- * @param {string} url The full URL of the article.
- * @returns {object|null} Object containing author, date, and extract, or null on failure.
- */
 async function scrapeArticleDetails(url) {
     try {
-        await sleep(ARTICLE_DELAY_MS); // Be polite to the server
+        await sleep(ARTICLE_DELAY_MS);
         const { data } = await axios.get(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            }
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' }
         });
         const $ = cheerio.load(data);
 
-        
         let author = $('.author').text().trim();
         author = author.replace(/^By\s+/i, '').trim() || 'N/A'; 
         
@@ -60,22 +48,26 @@ async function scrapeArticleDetails(url) {
         const dateMatch = dateText.match(/[A-Z][a-z]{2,}\.\s+\d{1,2},\s+\d{4}/);
         dateText = dateMatch ? dateMatch[0] : new Date().toISOString(); 
         
-        let bodyText = '';
         
+        let articleDate = new Date(dateText);
+        if (isNaN(articleDate.getTime())) {
+            articleDate = new Date(); 
+            console.warn(`[WARNING] Failed to parse date: "${dateText}". Using current date for article: ${url}`);
+        }
+        
+        let bodyText = '';
         const articleBodySelectors = [
-            'div.article-body-content', 
-            'div.page-content',         
-            '.article-body',            
-            '#article-body',            
+            'div.article-body-content',
+            'div.page-content',
+            '.article-body',
+            '#article-body',
         ];
         
         let contentContainer = $();
-        
         for (const selector of articleBodySelectors) {
             contentContainer = $(selector);
             if (contentContainer.length) break;
         }
-
         
         contentContainer.find('p').each((i, p) => {
             const paragraphText = $(p).text().trim();
@@ -90,8 +82,8 @@ async function scrapeArticleDetails(url) {
 
         return {
             author: author,
-            date: new Date(dateText),
-            extract: bodyText.trim(), 
+            date: articleDate, 
+            extract: bodyText.trim(),
             link: url,
         };
 
@@ -102,58 +94,76 @@ async function scrapeArticleDetails(url) {
 }
 
 
-
-/**
- * Scrapes the homepage to get a list of article links, then scrapes each link for details.
- * @param {string} url The URL to scrape (homepage).
- * @param {string} sourceName The name of the news source.
- * @returns {number} The number of new articles saved.
- */
-async function scrapeSite(url, sourceName) {
-    console.log(`\nStarting scrape for: ${sourceName} (${url})`);
-    let articlesSaved = 0;
-    let articleLinks = [];
-
+async function fetchSitemapIndex(indexUrl) {
+    console.log(`\nFetching Sitemap Index: ${indexUrl}`);
     try {
-        const { data } = await axios.get(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        const response = await axios.get(indexUrl);
+        const result = await xml2js.parseStringPromise(response.data);
+        
+        const sitemapLocs = result.sitemapindex.sitemap.map(s => s.loc[0]);
+        console.log(`Successfully found ${sitemapLocs.length} total sitemaps.`);
+        return sitemapLocs.filter(loc => loc.includes('/news/archive/')); 
+    } catch (error) {
+        console.error(`Error fetching/parsing sitemap index:`, error.message);
+        return [];
+    }
+}
+
+async function fetchArticleLinksFromSitemap(sitemapUrl) {
+    try {
+        const response = await axios.get(sitemapUrl);
+        const result = await xml2js.parseStringPromise(response.data);
+        
+        if (!result.urlset || !result.urlset.url) {
+            return [];
+        }
+        
+        const articleLocs = result.urlset.url.map(u => u.loc[0]);
+        return articleLocs;
+    } catch (error) {
+        console.error(`Error fetching/parsing article sitemap ${sitemapUrl}:`, error.message);
+        return [];
+    }
+}
+
+
+async function scrapeSite(url, sourceName) {
+    console.log(`\nStarting SITEMAP HARVEST for: ${sourceName}`);
+    let articlesSaved = 0;
+    let uniqueArticleLinks = new Set();
+
+    const sitemapIndexUrl = `${url}sitemap.xml`;
+    const archiveSitemaps = await fetchSitemapIndex(sitemapIndexUrl);
+
+    console.log(`\nStarting collection from ${archiveSitemaps.length} historical archives...`);
+    for (const archiveUrl of archiveSitemaps) {
+        await sleep(500);
+        const links = await fetchArticleLinksFromSitemap(archiveUrl);
+        let newLinksFound = 0;
+        
+        links.forEach(link => {
+            if (link.includes('/news/') && !uniqueArticleLinks.has(link)) {
+                uniqueArticleLinks.add(link);
+                newLinksFound++;
             }
         });
-        const $ = cheerio.load(data);
-
-       
-        const topStoriesContainer = $('.top-stories'); 
         
-        topStoriesContainer.find('a').each((i, element) => {
-            const relativeLink = $(element).attr('href');
-            if (relativeLink && relativeLink.includes('/news/')) { 
-                const link = new URL(relativeLink, url).href;
-                if (!articleLinks.includes(link)) {
-                     articleLinks.push(link);
-                }
+        console.log(`Collected ${newLinksFound} links from ${archiveUrl.split('/').pop()}. Total links: ${uniqueArticleLinks.size}`);
+    }
+
+    if (uniqueArticleLinks.size > 0) {
+        console.log(`\n--- STARTING DETAIL SCRAPE for ${uniqueArticleLinks.size} total links (${ARTICLE_DELAY_MS/1000}s delay per article) ---`);
+        let linkArray = Array.from(uniqueArticleLinks);
+
+        for (let i = 0; i < linkArray.length; i++) {
+            const link = linkArray[i];
+            
+            if (i % 50 === 0) {
+                 console.log(`Processing article ${i + 1} of ${linkArray.length}...`);
             }
-        });
-        
-        $('.item-card').each((i, element) => {
-            const linkElement = $(element).find('a.item-card-text').first();
-            const relativeLink = linkElement.attr('href');
-            if (relativeLink && relativeLink.includes('/news/')) { 
-                const link = new URL(relativeLink, url).href;
-                if (!articleLinks.includes(link)) { 
-                    articleLinks.push(link);
-                }
-            }
-        });
 
-        
-        console.log(`Found ${articleLinks.length} article links on the homepage. Starting detail scraping...`);
-
-        for (const link of articleLinks) {
             const existingArticle = await Article.findOne({ link: link });
-            if (existingArticle) {
-                continue; 
-            }
+            if (existingArticle) continue; 
 
             const articleData = await scrapeArticleDetails(link);
 
@@ -163,45 +173,37 @@ async function scrapeSite(url, sourceName) {
                      await Article.create(articleData);
                      articlesSaved++;
                  } catch (dbError) {
-                     if (dbError.code !== 11000) {
-                          console.error(`Error saving article to DB:`, dbError.message);
-                     }
+                     console.error(`\n[DB ERROR] Failed to save article ${link}. Code: ${dbError.code}. Message: ${dbError.message}\n`);
                  }
-            } else {
-                console.error(`Skipping article due to empty or short extract: ${link}`);
             }
         }
-        
-        console.log(`Finished processing article links. Saved ${articlesSaved} new articles.`);
-        return articlesSaved;
-
-    } catch (error) {
-        console.error(`Error scraping ${sourceName}:`, error.message);
-        return 0;
     }
+    
+    console.log(`\n--- SITEMAP HARVEST COMPLETE ---`);
+    console.log(`Total NEW articles saved to DB: ${articlesSaved}`);
+    return articlesSaved;
 }
 
-// --- EXPRESS SERVER ---
 const app = express();
 
 app.get('/', (req, res) => {
     res.send(`
         <div style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
             <h1 style="color: #4F46E5;">News Scraper Backend Running on Port ${PORT}</h1>
-            <p>Ready to scrape and insert data into MongoDB.</p>
+            <p>Ready for DEEP scrape and MongoDB insertion. **(Sitemap Method Active)**</p>
             <p>Access the endpoint below to start the scraping job:</p>
             <a href="/scrape-all" style="background-color: #4F46E5; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-                Start Scraping All Sites
+                Start Sitemap Harvesting All Sites
             </a>
             <p style="margin-top: 20px; font-size: 0.9em; color: #6B7280;">
-                (Note: Scraping is done sequentially with a ${SCRAPE_DELAY_MS/1000}s delay per site, and a ${ARTICLE_DELAY_MS/1000}s delay between articles.)
+                (Note: Scraping is now performed via sitemap XMLs. Detail fetching uses a ${ARTICLE_DELAY_MS/1000}s delay per article.)
             </p>
         </div>
     `);
 });
 
 app.get('/scrape-all', async (req, res) => {
-    console.log('--- SCRAPING JOB INITIATED ---');
+    console.log('--- SITEMAP HARVEST INITIATED ---');
     const results = [];
     let totalSaved = 0;
 
@@ -237,7 +239,7 @@ app.get('/scrape-all', async (req, res) => {
         </head>
         <body>
             <div class="container">
-                <h1>✅ Scraping Job Complete!</h1>
+                <h1>✅ Sitemap Harvesting Job Complete!</h1>
                 <div class="total">
                     TOTAL NEW ARTICLES SAVED: ${totalSaved}
                 </div>
