@@ -19,6 +19,7 @@ async function runAllScrapers() {
     for (const scraper of scrapers) {
         try {
             const savedCount = await scraper.run();
+            console.log(`Scraper ${scraper.name || 'unknown'} finished, saved ${savedCount} items.`);
             results.push({
                 savedCount
             });

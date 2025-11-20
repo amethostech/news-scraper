@@ -3,11 +3,8 @@ import * as cheerio from 'cheerio';
 import { runSitemapScraper } from '../utils/scraperRunner.js';
 import { sleep } from '../utils/common.js';
 
-const ARTICLE_DELAY_MS = 2000;
-
 async function scrapeArticleDetails(url) {
     try {
-        await sleep(ARTICLE_DELAY_MS);
         const { data } = await axios.get(url, {
             headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' }
         });
@@ -19,7 +16,6 @@ async function scrapeArticleDetails(url) {
         let dateText = $('.published-info').text().trim();
         const dateMatch = dateText.match(/[A-Z][a-z]{2,}\.\s+\d{1,2},\s+\d{4}/);
         dateText = dateMatch ? dateMatch[0] : new Date().toISOString();
-
 
         let articleDate = new Date(dateText);
         if (isNaN(articleDate.getTime())) {
