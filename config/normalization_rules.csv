@@ -1,0 +1,51 @@
+# Pharmaceutical Companies
+Pfizer: Pfizer Inc, Pfizer Limited
+Johnson & Johnson: J&J, Janssen, Janssen Pharmaceuticals
+AbbVie: AbbVie Inc, ABBV
+Merck: Merck & Co, Merck Sharp & Dohme, MSD, MRK
+Roche: F. Hoffmann-La Roche, Roche Diagnostics, Genentech
+Sanofi: Sanofi-Aventis, Sanofi Pasteur
+AstraZeneca: AZN, AstraZeneca PLC
+Novartis: Novartis AG, Novartis Pharma, NOVN
+Bristol Myers Squibb: BMS, BMY, Bristol-Myers
+GSK: GlaxoSmithKline, Glaxo, ViiV Healthcare
+Eli Lilly: Lilly, Eli Lilly and Company, LLY
+Novo Nordisk: Novo, NVO
+Amgen: Amgen Inc, AMGN
+Gilead: Gilead Sciences, GILD
+Bayer: Bayer AG, Bayer Pharmaceuticals
+Teva: Teva Pharmaceutical Industries, TEVA
+
+# Top Selling Drugs (Brand: Generic/Synonyms)
+Keytruda: pembrolizumab
+Ozempic: semaglutide, Wegovy, Rybelsus
+Mounjaro: tirzepatide, Zepbound
+Humira: adalimumab
+Dupixent: dupilumab
+Eliquis: apixaban
+Darzalex: daratumumab
+Opdivo: nivolumab
+Skyrizi: risankizumab
+Biktarvy: bictegravir, emtricitabine, tenofovir alafenamide
+Jardiance: empagliflozin
+Farxiga: dapagliflozin
+Stelara: ustekinumab
+Enbrel: etanercept
+
+# Medical Conditions & Abbreviations
+Diabetes: Type 2 Diabetes, T2D, Diabetes Mellitus
+Oncology: Cancer, Malignancy, Neoplasm, Tumor, Carcinoma
+COPD: Chronic Obstructive Pulmonary Disease
+HIV: Human Immunodeficiency Virus, AIDS
+Alzheimer's: Alzheimer's Disease, AD, Dementia
+Cardiovascular: Heart Disease, CAD, Myocardial Infarction, MI
+Hypertension: High Blood Pressure, HBP
+COVID-19: Coronavirus, SARS-CoV-2, 2019-nCoV
+Rheumatoid Arthritis: RA, Inflammatory Arthritis
+
+# Therapeutic Areas
+Immunology: Autoimmune, Inflammation
+Neurology: Neuroscience, CNS, Central Nervous System
+Hematology: Blood Disorders, Leukemia, Lymphoma
+Rare Diseases: Orphan Drugs, Orphan Diseases
+Vaccines: Immunization, Prophylaxis

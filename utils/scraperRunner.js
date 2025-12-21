@@ -55,8 +55,28 @@ export async function runSitemapScraper(config) {
                 console.log(`Processing article ${i + 1} of ${linkArray.length}...`);
             }
 
-            const existingArticle = await Article.findOne({ link: link });
-            if (existingArticle) continue;
+            // Check MongoDB only if connected (CSV is primary storage)
+            let skipMongoDB = false;
+            try {
+                const { isMongoDBConnected } = await import('./mongoWriter.js');
+                if (isMongoDBConnected()) {
+                    try {
+                        const existingArticle = await Promise.race([
+                            Article.findOne({ link: link }),
+                            new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+                        ]);
+                        if (existingArticle) continue;
+                    } catch (error) {
+                        // MongoDB query timed out or failed - skip MongoDB for this article
+                        skipMongoDB = true;
+                    }
+                } else {
+                    skipMongoDB = true;
+                }
+            } catch (error) {
+                // MongoDB not available - skip
+                skipMongoDB = true;
+            }
 
             // Tiny delay before processing to prevent DB overload
             await sleep(DB_WRITE_DELAY_MS);
@@ -65,11 +85,21 @@ export async function runSitemapScraper(config) {
 
             if (articleData && articleData.extract && articleData.extract.length > 100) {
                 articleData.source = sourceName;
-                try {
-                    await Article.create(articleData);
-                    articlesSaved++;
-                } catch (dbError) {
-                    console.error(`\n[DB ERROR] Failed to save article ${link}. Code: ${dbError.code}. Message: ${dbError.message}\n`);
+                
+                // Try MongoDB save only if connected and not skipped (CSV is primary)
+                if (!skipMongoDB) {
+                    try {
+                        const { isMongoDBConnected } = await import('./mongoWriter.js');
+                        if (isMongoDBConnected()) {
+                            await Promise.race([
+                                Article.create(articleData),
+                                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+                            ]);
+                            articlesSaved++;
+                        }
+                    } catch (dbError) {
+                        // Silently skip MongoDB errors - CSV is primary storage
+                    }
                 }
             }
         }

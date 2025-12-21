@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "nodemon scraper_backend.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scheduler": "node scheduler.js",
+    "scheduler:test": "node scheduler.js --test"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,11 @@
     "express": "^5.1.0",
     "mongoose": "^8.19.3",
     "tough-cookie": "^6.0.0",
+    "node-cron": "^3.0.3",
+    "puppeteer": "^24.34.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "rss-parser": "^3.13.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {

@@ -3,6 +3,7 @@ import * as cheerio from 'cheerio';
 import xml2js from 'xml2js';
 import { sleep } from "../utils/common.js";
 import Article from "../models/Article.js";
+import { collectAndScrapeRSS } from '../utils/simpleRSSCollector.js';
 
 const SITEMAP_URLS = [
     // 'https://www.biospace.com/sitemap-latest.xml',
@@ -273,14 +274,21 @@ async function scrapeArticleDetails(url) {
     }
 }
 
-export async function run() {
-    const allResults = [];
-    let totalProcessed = 0;
-    let totalFiltered = 0;
+// Export scrapeArticleDetails for RSS collector
+export { scrapeArticleDetails };
 
-    console.log(`\n=== BIOSPACE SCRAPER STARTING ===`);
-    console.log(`Sitemaps to process: ${SITEMAP_URLS.length}`);
-    console.log(`Maximum articles limit: ${MAX_ARTICLES}`);
+export async function run(options = {}) {
+    const sourceName = 'BioSpace';
+    
+    if (options.historical) {
+        // Historical scraping via sitemap
+        const allResults = [];
+        let totalProcessed = 0;
+        let totalFiltered = 0;
+
+        console.log(`\n=== BIOSPACE SCRAPER STARTING ===`);
+        console.log(`Sitemaps to process: ${SITEMAP_URLS.length}`);
+        console.log(`Maximum articles limit: ${MAX_ARTICLES}`);
 
     for (const sitemapUrl of SITEMAP_URLS) {
         if (allResults.length >= MAX_ARTICLES) {
@@ -367,34 +375,62 @@ export async function run() {
         }
     }
 
-    console.log(`\n=== BIOSPACE SCRAPER COMPLETE ===`);
-    console.log(`Total articles collected: ${allResults.length}`);
-    console.log(`Total URLs processed: ${totalProcessed}`);
-    console.log(`Total URLs filtered: ${totalFiltered}`);
-    console.log(`Sitemaps processed: ${SITEMAP_URLS.length}`);
+        console.log(`\n=== BIOSPACE SCRAPER COMPLETE ===`);
+        console.log(`Total articles collected: ${allResults.length}`);
+        console.log(`Total URLs processed: ${totalProcessed}`);
+        console.log(`Total URLs filtered: ${totalFiltered}`);
+        console.log(`Sitemaps processed: ${SITEMAP_URLS.length}`);
 
 
 
-    console.log(`\n--- DATABASE SYNC STARTING ---`);
-    console.log(`Found ${allResults.length} articles to potentially save.`);
-
-    const savePromises = allResults.map(async (article) => {
+        // MongoDB is optional - CSV is primary storage
+        // Only attempt MongoDB save if connected
         try {
-            const exists = await Article.findOne({ link: article.link });
-            if (exists) {
-                return null;
+            const { isMongoDBConnected } = await import('../utils/mongoWriter.js');
+            if (isMongoDBConnected()) {
+                console.log(`\n--- DATABASE SYNC STARTING ---`);
+                console.log(`Found ${allResults.length} articles to potentially save.`);
+
+                const savePromises = allResults.map(async (article) => {
+                    try {
+                        // Use timeout to prevent hanging
+                        const exists = await Promise.race([
+                            Article.findOne({ link: article.link }),
+                            new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+                        ]);
+                        if (exists) {
+                            return null;
+                        }
+                        await Promise.race([
+                            Article.create(article),
+                            new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+                        ]);
+                        return article;
+                    } catch (error) {
+                        // Silently skip MongoDB errors - CSV is primary
+                        return null;
+                    }
+                });
+
+                const savedArticles = (await Promise.all(savePromises)).filter(Boolean);
+                console.log(`--- DATABASE SYNC COMPLETE ---`);
+                console.log(`Successfully saved ${savedArticles.length} new articles to MongoDB.`);
             }
-            await Article.create(article);
-            return article;
         } catch (error) {
-            console.error(`[DB ERROR] Failed to save article ${article.link}: ${error.message}`);
-            return null;
+            // MongoDB not available or error - continue silently
         }
-    });
-
-    const savedArticles = (await Promise.all(savePromises)).filter(Boolean);
-
-    console.log(`--- DATABASE SYNC COMPLETDATABASE E ---`);
-    console.log(`Successfully saved ${savedArticles.length} new articles.`);
-    return allResults;
+        
+        return allResults;
+    } else {
+        // Default: RSS feed for weekly updates
+        const sourceConfig = {
+            sourceName: sourceName,
+            rssUrl: 'https://www.biospace.com/rss',
+            maxConcurrent: 3,
+            delayBetweenScrapes: 1000
+        };
+        
+        const results = await collectAndScrapeRSS(sourceConfig, scrapeArticleDetails);
+        return results;
+    }
 }

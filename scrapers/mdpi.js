@@ -90,16 +90,31 @@ export async function run() {
                 const article = convertCrossrefToArticle(item);
                 if (!article) continue;
 
-                // Check DB duplicate
-                const exists = await Article.findOne({ link: article.link });
-                if (exists) continue;
-
-                // Save like other scrapers (one at a time)
+                // MongoDB is optional - CSV is primary storage
+                // Only check/save to MongoDB if connected
                 try {
-                    await Article.create(article);
-                    savedCount++;
-                } catch (err) {
-                    console.error(`[DB ERROR] Skipped one article: ${err.message}`);
+                    const { isMongoDBConnected } = await import('../utils/mongoWriter.js');
+                    if (isMongoDBConnected()) {
+                        try {
+                            // Use timeout to prevent hanging
+                            const exists = await Promise.race([
+                                Article.findOne({ link: article.link }),
+                                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+                            ]);
+                            if (exists) continue;
+
+                            // Save like other scrapers (one at a time)
+                            await Promise.race([
+                                Article.create(article),
+                                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+                            ]);
+                            savedCount++;
+                        } catch (err) {
+                            // Silently skip MongoDB errors - CSV is primary
+                        }
+                    }
+                } catch (error) {
+                    // MongoDB not available - continue silently
                 }
 
                 await sleep(30); // Prevent DB overload

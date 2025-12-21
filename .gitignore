@@ -1,2 +1,27 @@
-.env
+# Dependencies
 node_modules/
+venv/
+__pycache__/
+*.py[cod]
+
+# Environment & Secrets
+.env
+
+# Data Files (The exclusions you requested)
+data/
+*.log
+*.tmp
+# Ignore CSVs and JSONs in the root (but we might want to keep some config ones if they were there, though config/ is safer)
+*.csv
+*.json
+
+# Exceptions (Config files and package info we DO want to keep)
+!config/normalization_rules.csv
+!package.json
+!package-lock.json
+!normalization_rules.csv
+
+# System
+.DS_Store
+.idea/
+.vscode/

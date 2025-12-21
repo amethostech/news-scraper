@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { runSitemapScraper } from '../utils/scraperRunner.js';
+import { collectAndScrapeRSS } from '../utils/simpleRSSCollector.js';
 import { sleep } from '../utils/common.js';
 
 async function scrapeArticleDetails(url) {
@@ -61,12 +62,28 @@ async function scrapeArticleDetails(url) {
     }
 }
 
-export async function run() {
-    return await runSitemapScraper({
-        sourceName: 'BioPharma Dive',
-        sitemapIndexUrl: 'https://www.biopharmadive.com/sitemap.xml',
-        sitemapFilter: (loc) => loc.includes('/news/archive/'),
-        linkFilter: (link) => link.includes('/news/'),
-        scrapeDetails: scrapeArticleDetails
-    });
+export async function run(options = {}) {
+    const sourceName = 'BioPharma Dive';
+    
+    if (options.historical) {
+        // Historical scraping via sitemap
+        return await runSitemapScraper({
+            sourceName: sourceName,
+            sitemapIndexUrl: 'https://www.biopharmadive.com/sitemap.xml',
+            sitemapFilter: (loc) => loc.includes('/news/archive/'),
+            linkFilter: (link) => link.includes('/news/'),
+            scrapeDetails: scrapeArticleDetails
+        });
+    } else {
+        // Default: RSS feed for weekly updates
+        const sourceConfig = {
+            sourceName: sourceName,
+            rssUrl: 'https://www.biopharmadive.com/feeds/news',
+            maxConcurrent: 3,
+            delayBetweenScrapes: 1000
+        };
+        
+        const results = await collectAndScrapeRSS(sourceConfig, scrapeArticleDetails);
+        return results;
+    }
 }
