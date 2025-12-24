@@ -139,7 +139,17 @@ export async function scrapeArticleContentWithPuppeteer(url, contentSelectors, o
             const dateEl = document.querySelector(dateSel);
             if (dateEl) {
                 const datetime = dateEl.getAttribute('datetime') || dateEl.textContent.trim();
-                date = new Date(datetime);
+                try {
+                    // Convert to ISO string to prevent "[object Object]" serialization
+                    const dateObj = new Date(datetime);
+                    if (!isNaN(dateObj.getTime())) {
+                        date = dateObj.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+                    } else {
+                        date = datetime; // Keep original if parsing fails
+                    }
+                } catch (e) {
+                    date = datetime; // Keep original if error occurs
+                }
             }
 
             // Extract author

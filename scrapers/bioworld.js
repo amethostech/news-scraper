@@ -18,7 +18,7 @@ const BASE_URL = 'https://www.bioworld.com';
 export async function scrapeArticleDetails(url) {
     try {
         await randomDelay(2000, 4000);
-        
+
         const response = await axios.get(url, {
             headers: getRealisticHeaders(BASE_URL),
             timeout: 15000,
@@ -27,19 +27,19 @@ export async function scrapeArticleDetails(url) {
                 return status < 500;
             }
         });
-        
+
         if (response.status === 403 || response.status === 429) {
             throw new Error(`Blocked (HTTP ${response.status})`);
         }
-        
+
         const html = response.data;
-        
+
         if (html.includes('Access Denied') || html.includes('403') || html.includes('blocked')) {
             throw new Error('Blocked (content check)');
         }
-        
+
         const $ = cheerio.load(html);
-        
+
         // Extract title
         let title = '';
         const titleSelectors = [
@@ -66,7 +66,7 @@ export async function scrapeArticleDetails(url) {
                 }
             }
         }
-        
+
         // Extract author
         let author = '';
         const authorSelectors = [
@@ -79,7 +79,7 @@ export async function scrapeArticleDetails(url) {
             '.contributor-name',
             '.byline'
         ];
-        
+
         for (const selector of authorSelectors) {
             if (selector.startsWith('meta')) {
                 const metaContent = $(selector).attr('content');
@@ -95,7 +95,7 @@ export async function scrapeArticleDetails(url) {
                 }
             }
         }
-        
+
         // Extract date
         let articleDate = null;
         const dateSelectors = [
@@ -107,29 +107,38 @@ export async function scrapeArticleDetails(url) {
             'meta[name="date"]',
             '.date-published'
         ];
-        
+
         for (const selector of dateSelectors) {
             if (selector.startsWith('meta')) {
                 const metaContent = $(selector).attr('content');
                 if (metaContent) {
-                    articleDate = new Date(metaContent);
-                    if (!isNaN(articleDate.getTime())) break;
+                    const tempDate = new Date(metaContent);
+                    if (!isNaN(tempDate.getTime())) {
+                        articleDate = tempDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                        break;
+                    }
                 }
             } else if (selector.includes('[datetime]')) {
                 const datetime = $(selector).first().attr('datetime');
                 if (datetime) {
-                    articleDate = new Date(datetime);
-                    if (!isNaN(articleDate.getTime())) break;
+                    const tempDate = new Date(datetime);
+                    if (!isNaN(tempDate.getTime())) {
+                        articleDate = tempDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                        break;
+                    }
                 }
             } else {
                 const dateText = $(selector).first().text().trim();
                 if (dateText) {
-                    articleDate = new Date(dateText);
-                    if (!isNaN(articleDate.getTime())) break;
+                    const tempDate = new Date(dateText);
+                    if (!isNaN(tempDate.getTime())) {
+                        articleDate = tempDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                        break;
+                    }
                 }
             }
         }
-        
+
         // Extract body text
         let bodyText = '';
         const bodySelectors = [
@@ -146,23 +155,23 @@ export async function scrapeArticleDetails(url) {
             '.article-text',
             '.box1.article'
         ];
-        
+
         for (const selector of bodySelectors) {
             const content = $(selector);
             if (content.length > 0) {
                 content.find('script, style, nav, footer, .advertisement, .ad, .related-articles, .social-share').remove();
-                
+
                 bodyText = content.text()
                     .replace(/\s+/g, ' ')
                     .replace(/\n+/g, '\n')
                     .trim();
-                
-                if (bodyText.length > 100) { 
+
+                if (bodyText.length > 100) {
                     break;
                 }
             }
         }
-        
+
         // Fallback: get all paragraph text
         if (!bodyText || bodyText.length < 100) {
             const paragraphs = $('article p, .article p, main p')
@@ -172,7 +181,7 @@ export async function scrapeArticleDetails(url) {
 
             bodyText = paragraphs.join('\n\n').replace(/\s+/g, ' ').trim();
         }
-        
+
         // BioWorld articles may be behind paywall - accept teaser content if full content not available
         if (!bodyText || bodyText.length < 50) {
             // Try to get teaser text as fallback
@@ -200,38 +209,38 @@ export async function scrapeArticleDetails(url) {
  */
 export async function discoverUrlsFromTopics() {
     console.log(`[${SOURCE_NAME}] Discovering URLs from topic pages...`);
-    
+
     const topics = [
         '/topics/84-bioworld',
         '/topics/85-bioworld-medtech',
         '/topics/86-bioworld-asia',
         '/topics/520-bioworld-science'
     ];
-    
+
     const allUrls = new Set();
     const maxPagesPerTopic = 500; // Increased from 200 to 500 for more comprehensive discovery
-    
+
     for (const topic of topics) {
         console.log(`[${SOURCE_NAME}] Checking topic: ${topic}`);
-        
+
         for (let page = 1; page <= maxPagesPerTopic; page++) {
-            const url = page === 1 
+            const url = page === 1
                 ? `${BASE_URL}${topic}`
                 : `${BASE_URL}${topic}?page=${page}`;
-            
+
             try {
                 await sleep(2000); // Delay between requests
-                
+
                 const response = await axios.get(url, {
                     headers: getRealisticHeaders(BASE_URL),
                     timeout: 15000
                 });
-                
+
                 const $ = cheerio.load(response.data);
-                
+
                 // Extract article URLs - try multiple selectors
                 const articleLinks = [];
-                
+
                 // Method 1: Direct article links
                 $('a[href*="/articles/"]').each((i, el) => {
                     const href = $(el).attr('href');
@@ -240,7 +249,7 @@ export async function discoverUrlsFromTopics() {
                         if (href.includes('/articles/topic/') || href.includes('/articles/topic,')) {
                             return; // Skip topic links
                         }
-                        
+
                         // Check if it's an actual article (has numeric ID pattern)
                         if (href.match(/\/articles\/\d+-/) || href.match(/\/articles\/\d+\//)) {
                             const fullUrl = href.startsWith('http') ? href : `${BASE_URL}${href}`;
@@ -251,7 +260,7 @@ export async function discoverUrlsFromTopics() {
                         }
                     }
                 });
-                
+
                 // Method 2: Check featured stories and article listings
                 $('.featured-stories__article-title-link, .portal-section__item-link, a[href*="articles/"][href*="-"]').each((i, el) => {
                     const href = $(el).attr('href');
@@ -263,12 +272,12 @@ export async function discoverUrlsFromTopics() {
                         }
                     }
                 });
-                
+
                 const urlsBefore = allUrls.size;
                 articleLinks.forEach(link => allUrls.add(link));
                 const urlsAfter = allUrls.size;
                 const newUrlsThisPage = urlsAfter - urlsBefore;
-                
+
                 // Stop if no new URLs found for 3 consecutive pages
                 if (newUrlsThisPage === 0 && page > 1) {
                     if (page > 3) {
@@ -276,17 +285,17 @@ export async function discoverUrlsFromTopics() {
                         break;
                     }
                 }
-                
+
                 if (page % 20 === 0 || newUrlsThisPage > 0) {
                     console.log(`[${SOURCE_NAME}] Page ${page} of ${topic}: Found ${newUrlsThisPage} new URLs (${allUrls.size} total so far)`);
                 }
-                
+
                 // If no articles found and we're past page 10, likely no more content
                 if (articleLinks.length === 0 && page > 10) {
                     console.log(`[${SOURCE_NAME}] No articles found on page ${page}, stopping pagination for ${topic}`);
                     break;
                 }
-                
+
             } catch (error) {
                 if (error.response?.status === 404 && page > 1) {
                     // No more pages
@@ -296,10 +305,10 @@ export async function discoverUrlsFromTopics() {
                 // Continue to next page
             }
         }
-        
+
         console.log(`[${SOURCE_NAME}] Found ${allUrls.size} total URLs after processing ${topic}`);
     }
-    
+
     console.log(`[${SOURCE_NAME}] Total URLs discovered from topics: ${allUrls.size}`);
     return Array.from(allUrls);
 }
@@ -309,29 +318,29 @@ export async function discoverUrlsFromTopics() {
  */
 async function discoverUrlsFromSitemap() {
     console.log(`[${SOURCE_NAME}] Discovering URLs from sitemap...`);
-    
+
     // BioWorld sitemap redirects to /ext/resources/sitemap.xml
     const sitemapUrls = [
         `${BASE_URL}/sitemap.xml`,
         `${BASE_URL}/ext/resources/sitemap.xml`
     ];
-    
+
     const allUrls = [];
-    
+
     for (const sitemapUrl of sitemapUrls) {
         try {
             // Try to fetch sitemap index first
             const sitemaps = await fetchSitemapIndex(sitemapUrl);
-            
+
             if (sitemaps.length > 0) {
                 // It's a sitemap index - fetch each sitemap
                 console.log(`[${SOURCE_NAME}] Found ${sitemaps.length} sitemaps in index`);
-                
+
                 for (const subSitemapUrl of sitemaps) {
                     try {
                         await sleep(1000);
                         const sitemapData = await fetchArticleLinksFromSitemap(subSitemapUrl);
-                        
+
                         sitemapData.forEach(item => {
                             const url = typeof item === 'string' ? item : item.url;
                             if (url && url.includes('bioworld.com') && url.includes('/articles/')) {
@@ -343,7 +352,7 @@ async function discoverUrlsFromSitemap() {
                         continue;
                     }
                 }
-                
+
                 if (allUrls.length > 0) break; // Found working sitemap
             } else {
                 // Direct sitemap with URLs
@@ -354,14 +363,14 @@ async function discoverUrlsFromSitemap() {
                         allUrls.push(cleanUrl(url));
                     }
                 });
-                
+
                 if (allUrls.length > 0) break; // Found working sitemap
             }
         } catch (error) {
             continue; // Try next sitemap URL
         }
     }
-    
+
     console.log(`[${SOURCE_NAME}] Found ${allUrls.length} article URLs from sitemap`);
     return allUrls;
 }
@@ -395,14 +404,14 @@ export async function scrapeHistorical(options = {}) {
 
     // Discover URLs from multiple sources
     console.log(`[${SOURCE_NAME}] Step 1: Discovering article URLs from multiple sources...`);
-    
+
     // 1. Sitemap discovery (most comprehensive)
     const sitemapUrls = await discoverUrlsFromSitemap();
-    
+
     // 2. Topic pages (enhanced pagination)
     console.log(`[${SOURCE_NAME}] Step 2: Discovering URLs from topic pages...`);
     const topicUrls = await discoverUrlsFromTopics();
-    
+
     // 3. RSS feed URLs
     console.log(`[${SOURCE_NAME}] Step 3: Getting RSS feed URLs...`);
     let rssUrls = [];
@@ -416,7 +425,7 @@ export async function scrapeHistorical(options = {}) {
 
     // Combine and deduplicate (prioritize sitemap and topic URLs)
     const allUrls = Array.from(new Set([...sitemapUrls, ...topicUrls, ...rssUrls]));
-    
+
     if (allUrls.length === 0) {
         console.log(`[${SOURCE_NAME}] No URLs found. Cannot proceed with historical scraping.`);
         return { total: 0, saved: 0, failed: 0 };
@@ -440,7 +449,7 @@ export async function scrapeHistorical(options = {}) {
     const { readExistingLinksCombined } = await import('../utils/csvWriter.js');
     const existingLinks = await readExistingLinksCombined(csvFilePath);
     const newUrls = urlsToProcess.filter(url => !existingLinks.has(url));
-    
+
     console.log(`[${SOURCE_NAME}] ${newUrls.length} new articles (${urlsToProcess.length - newUrls.length} already exist)`);
 
     if (newUrls.length === 0) {
@@ -451,36 +460,36 @@ export async function scrapeHistorical(options = {}) {
     // Scrape articles
     console.log(`[${SOURCE_NAME}] Step 4: Scraping ${newUrls.length} articles...`);
     console.log(`[${SOURCE_NAME}] Rate: ~3 seconds per article\n`);
-    
+
     const articles = [];
     let failed = 0;
     const startTime = Date.now();
 
     for (let i = 0; i < newUrls.length; i++) {
         const url = newUrls[i];
-        
+
         try {
             await limiter.wait();
-            
+
             const article = await scrapeArticleDetails(url);
             article.source = SOURCE_NAME;
             article.scrapedAt = new Date();
             articles.push(article);
-            
+
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
             const rate = (i + 1) / elapsed * 60;
             const remaining = newUrls.length - (i + 1);
             const eta = Math.ceil(remaining / rate);
-            
+
             console.log(`[${i + 1}/${newUrls.length}] ✓ ${article.title.substring(0, 60)}... (ETA: ${eta}m)`);
-            
+
             // Save in batches of 50
             if (articles.length >= 50) {
                 await appendArticlesToCSV(articles, SOURCE_NAME);
                 console.log(`[${SOURCE_NAME}] 💾 Saved batch of ${articles.length} articles`);
                 articles.length = 0;
             }
-            
+
         } catch (error) {
             failed++;
             console.error(`[${i + 1}/${newUrls.length}] ✗ Failed: ${url.substring(0, 60)}... - ${error.message}`);
@@ -494,7 +503,7 @@ export async function scrapeHistorical(options = {}) {
     }
 
     const totalTime = Math.floor((Date.now() - startTime) / 1000 / 60);
-    
+
     console.log(`\n=== ${SOURCE_NAME} HISTORICAL SCRAPING COMPLETE ===`);
     console.log(`Total URLs discovered: ${allUrls.length}`);
     console.log(`URLs processed: ${urlsToProcess.length}`);
@@ -515,7 +524,7 @@ export async function scrapeHistorical(options = {}) {
 export async function run(options = {}) {
     console.log(`\n=== ${SOURCE_NAME} SCRAPER ===`);
     console.log(`Source: ${BASE_URL}\n`);
-    
+
     if (options.historical) {
         return await scrapeHistorical({
             testMode: options.testMode || false,
@@ -524,7 +533,7 @@ export async function run(options = {}) {
     } else {
         // Default: RSS update
         console.log('\n=== BIOWORLD SCRAPER STARTING ===');
-        
+
         const sourceConfig = {
             sourceName: SOURCE_NAME,
             rssUrls: [
@@ -537,7 +546,7 @@ export async function run(options = {}) {
 
         try {
             const results = await collectAndScrapeRSS(sourceConfig, scrapeArticleDetails);
-            
+
             console.log(`\n=== BIOWORLD SCRAPER COMPLETE ===`);
             console.log(`Total articles in feed: ${results.total}`);
             console.log(`New articles found: ${results.new}`);

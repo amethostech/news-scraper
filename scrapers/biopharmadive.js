@@ -16,11 +16,14 @@ async function scrapeArticleDetails(url) {
 
         let dateText = $('.published-info').text().trim();
         const dateMatch = dateText.match(/[A-Z][a-z]{2,}\.\s+\d{1,2},\s+\d{4}/);
-        dateText = dateMatch ? dateMatch[0] : new Date().toISOString();
+        dateText = dateMatch ? dateMatch[0] : new Date().toISOString().split('T')[0];
 
-        let articleDate = new Date(dateText);
-        if (isNaN(articleDate.getTime())) {
-            articleDate = new Date();
+        let articleDate = null;
+        const tempDate = new Date(dateText);
+        if (!isNaN(tempDate.getTime())) {
+            articleDate = tempDate.toISOString().split('T')[0]; // YYYY-MM-DD
+        } else {
+            articleDate = new Date().toISOString().split('T')[0]; // Use current date as fallback
             console.warn(`[WARNING] Failed to parse date: "${dateText}". Using current date for article: ${url}`);
         }
 
@@ -64,7 +67,7 @@ async function scrapeArticleDetails(url) {
 
 export async function run(options = {}) {
     const sourceName = 'BioPharma Dive';
-    
+
     if (options.historical) {
         // Historical scraping via sitemap
         return await runSitemapScraper({
@@ -82,7 +85,7 @@ export async function run(options = {}) {
             maxConcurrent: 3,
             delayBetweenScrapes: 1000
         };
-        
+
         const results = await collectAndScrapeRSS(sourceConfig, scrapeArticleDetails);
         return results;
     }

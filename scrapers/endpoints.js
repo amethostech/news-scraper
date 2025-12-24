@@ -319,20 +319,29 @@ export async function scrapeArticleDetails(url) {
             if (selector.startsWith('meta')) {
                 const metaContent = $(selector).attr('content');
                 if (metaContent) {
-                    articleDate = new Date(metaContent);
-                    if (!isNaN(articleDate.getTime())) break;
+                    const tempDate = new Date(metaContent);
+                    if (!isNaN(tempDate.getTime())) {
+                        articleDate = tempDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                        break;
+                    }
                 }
             } else if (selector.includes('[datetime]')) {
                 const datetime = $(selector).first().attr('datetime');
                 if (datetime) {
-                    articleDate = new Date(datetime);
-                    if (!isNaN(articleDate.getTime())) break;
+                    const tempDate = new Date(datetime);
+                    if (!isNaN(tempDate.getTime())) {
+                        articleDate = tempDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                        break;
+                    }
                 }
             } else {
                 const dateText = $(selector).first().text().trim();
                 if (dateText) {
-                    articleDate = new Date(dateText);
-                    if (!isNaN(articleDate.getTime())) break;
+                    const tempDate = new Date(dateText);
+                    if (!isNaN(tempDate.getTime())) {
+                        articleDate = tempDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                        break;
+                    }
                 }
             }
         }
