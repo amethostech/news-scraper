@@ -1,0 +1,15 @@
+# NER Pipeline Dependencies
+
+# Core
+spacy>=3.7.0
+pandas>=2.0.0
+tqdm>=4.65.0
+requests>=2.31.0
+
+# Hugging Face (for transformer NER)
+transformers>=4.35.0
+torch>=2.0.0
+
+# spaCy English models (run after pip install):
+# python -m spacy download en_core_web_sm   # Small (12 MB, fast)
+# python -m spacy download en_core_web_lg   # Large (560 MB, more accurate)

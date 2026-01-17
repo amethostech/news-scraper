@@ -1,0 +1,50 @@
+RegulatoryIndex,,RegulatoryKeyword
+R01,,FDA approval
+R01,,FDA approved
+R01,,FDA clears
+R02,,EMA approval
+R02,,EMA approved
+R02,,European Medicines Agency
+R03,,Phase 1
+R03,,Phase I
+R03,,Phase 1 trial
+R04,,Phase 2
+R04,,Phase II
+R04,,Phase 2 trial
+R05,,Phase 3
+R05,,Phase III
+R05,,Phase 3 trial
+R05,,pivotal trial
+R06,,clinical trial
+R06,,clinical study
+R06,,clinical trials
+R07,,NDA
+R07,,New Drug Application
+R08,,BLA
+R08,,Biologics License Application
+R09,,IND
+R09,,Investigational New Drug
+R10,,sNDA
+R10,,supplemental NDA
+R11,,Priority Review
+R11,,Fast Track
+R11,,Breakthrough Therapy
+R12,,Accelerated Approval
+R12,,Conditional Approval
+R13,,Complete Response Letter
+R13,,CRL
+R14,,PDUFA
+R14,,PDUFA date
+R15,,Advisory Committee
+R15,,AdCom
+R15,,FDA panel
+R16,,label expansion
+R16,,expanded indication
+R17,,first-in-class
+R17,,first in class
+R18,,orphan drug designation
+R18,,orphan designation
+R19,,REMS
+R19,,Risk Evaluation
+R20,,post-marketing
+R20,,pharmacovigilance

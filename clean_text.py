@@ -246,6 +246,18 @@ def remove_boilerplate(text):
         r'subscribe now[^.]*\.',
         r'sign up for[^.]*premium[^.]*\.',
         
+        # GenePool and similar daily/weekly update prompts
+        r'get daily news updates[^!.]*[!.]',
+        r'get weekly news updates[^!.]*[!.]',
+        r'when you subscribe to genepool[^!.]*[!.]',
+        r'subscribe to genepool[^!.]*[!.]',
+        r'join genepool[^!.]*[!.]',
+        r'sign up for genepool[^!.]*[!.]',
+        r'get the latest news[^!.]*subscribe[^!.]*[!.]',
+        r'stay updated[^!.]*subscribe[^!.]*[!.]',
+        r'never miss[^!.]*subscribe[^!.]*[!.]',
+        r'don\'t miss[^!.]*subscribe[^!.]*[!.]',
+        
         # Correction requests
         r'to submit a correction request[^.]*\.',
         r'to submit a correction[^.]*\.',
@@ -259,8 +271,16 @@ def remove_boilerplate(text):
         r'subscribe to[^.]*newsletter[^.]*\.',
         r'get[^.]*newsletter[^.]*\.',
         r'receive[^.]*newsletter[^.]*\.',
-        r'get free access to[^.]*articles[^.]*newsletters[^.]*\.',  # "Get free access to articles, plus choose newsletters..."
+        r'get free access to[^.]*articles[^.]*newsletters[^.]*\.',
         r'choose newsletters to get straight to your inbox\.',
+        r'sign up to receive[^!.]*[!.]',
+        r'subscribe to receive[^!.]*[!.]',
+        
+        # Social media prompts
+        r'follow us on[^.]*\.',
+        r'like us on facebook[^.]*\.',
+        r'connect with us on[^.]*\.',
+        r'join us on[^.]*linkedin[^.]*\.',
         
         # Author bio patterns (only if at end, followed by subscription/correction)
         r'[a-z]+ [a-z]+ covers[^.]*\.\s*(to read|subscribe|to submit)',
@@ -269,9 +289,25 @@ def remove_boilerplate(text):
         # Generic prompts
         r'for more information[^.]*\.',
         r'read more at[^.]*\.',
-        r'click here[^.]*\.',
+        r'click here[^!.]*[!.]',  # Matches click here... ending with . or !
+        r'please click here[^!.]*[!.]',
         r'learn more[^.]*\.',
         r'continue reading[^.]*\.',
+        
+        # Common ending CTAs
+        r'start your free trial[^!.]*[!.]',
+        r'try it free[^!.]*[!.]',
+        r'register now[^!.]*[!.]',
+        r'register for free[^!.]*[!.]',
+        r'create your free account[^!.]*[!.]',
+        
+        # Paywall/subscription prompts
+        r'signin or subscribe[^!.]*[!.]',
+        r'login or subscribe[^!.]*[!.]',
+        r'please login or subscribe[^!.]*[!.]',
+        r'subscribe now for[^!.]*[!.]',
+        r'for instant access[^!.]*[!.]',
+        r'\d+ word remain[^!.]*[!.]?',
     ]
     
     # Remove each pattern
@@ -281,12 +317,21 @@ def remove_boilerplate(text):
     # Remove everything after common ending markers (more aggressive cleanup)
     # These patterns remove everything from a marker to the end
     ending_markers = [
-        r'\.\s*to read the rest.*$',           # Everything after "to read the rest"
-        r'\.\s*to read the full.*$',          # Everything after "to read the full"
-        r'\.\s*subscribe.*$',                  # Everything after "subscribe"
-        r'\.\s*to submit a correction.*$',   # Everything after "to submit a correction"
-        r'\.\s*contact us.*$',                # Everything after "contact us"
-        r'\.\s*for more information.*$',      # Everything after "for more information"
+        r'\.?\s*to read the rest.*$',           # Everything after "to read the rest"
+        r'\.?\s*to read the full.*$',          # Everything after "to read the full"
+        r'\.?\s*to continue reading.*$',       # Everything after "to continue reading"
+        r'\.?\s*subscribe now.*$',             # Everything after "subscribe now"
+        r'\.?\s*signin or subscribe.*$',       # Everything after "signin or subscribe"
+        r'\.?\s*login or subscribe.*$',        # Everything after "login or subscribe"
+        r'\.?\s*please login or subscribe.*$', # Everything after "please login or subscribe"
+        r'\.?\s*to submit a correction.*$',    # Everything after "to submit a correction"
+        r'\.?\s*click here to.*$',             # Everything after "click here to"
+        r'\.?\s*click here for.*$',            # Everything after "click here for"
+        r'\.?\s*and it\'?s all free.*$',       # Everything after "and it's all free"
+        r'\.?\s*subscribe today.*$',           # Everything after "subscribe today"
+        r'\.?\s*login here.*$',                # Everything after "login here"
+        r'\.?\s*for more information and to place your order.*$',  # Sales prompts
+        r'\.?\s*\d+ word remain.*$',           # Paywall word count
     ]
     
     for marker in ending_markers:
@@ -415,6 +460,32 @@ try:
     # Apply lemmatization to cleaned text and replace Cleaned_Text_G with lemmatized version
     df["Cleaned_Text_G"] = df["Cleaned_Text_G"].apply(lemmatize_text)
     print("Lemmatization complete! Cleaned_Text_G now contains lemmatized text.")
+    
+    # Post-lemmatization cleanup for remaining boilerplate (works on lowercased text without punctuation)
+    print("Applying post-lemmatization boilerplate cleanup...")
+    post_clean_patterns = [
+        r'click here.*$',  # Everything from "click here" to end
+        r'to register click here.*$',
+        r'signin or subscribe.*$',
+        r'login or subscribe.*$',
+        r'please login or subscribe.*$',
+        r'subscribe now.*$',
+        r'for instant access.*$',
+        r'\d+ word remain.*$',
+        r'register now.*$',
+        r'subscribe today.*$',
+    ]
+    
+    def post_clean_boilerplate(text):
+        if pd.isna(text) or str(text).strip() == "":
+            return text
+        text_str = str(text)
+        for pattern in post_clean_patterns:
+            text_str = re.sub(pattern, '', text_str, flags=re.IGNORECASE)
+        return text_str.strip()
+    
+    df["Cleaned_Text_G"] = df["Cleaned_Text_G"].apply(post_clean_boilerplate)
+    print("Post-lemmatization cleanup complete!")
     
 except ImportError:
     print("NLTK not available. Installing...")

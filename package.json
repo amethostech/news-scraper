@@ -19,13 +19,14 @@
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "minio": "^8.0.6",
     "mongoose": "^8.19.3",
-    "tough-cookie": "^6.0.0",
     "node-cron": "^3.0.3",
     "puppeteer": "^24.34.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "rss-parser": "^3.13.0",
+    "tough-cookie": "^6.0.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {

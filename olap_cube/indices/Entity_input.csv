@@ -1,0 +1,198 @@
+Entity_ID,Entity_Variant,Entity_Canonical,Entity_Type,Entity_Domain
+E001,AbbVie,Abbvie,Company,Healthcare
+E001,Abbvie-Allergan,Abbvie,Company,Healthcare
+E001,Abbvie-Partnered,Abbvie,Company,Healthcare
+E002,Alexion,Alexion,Company,Healthcare
+E002,Alexion-Achillion,Alexion,Company,Healthcare
+E003,Alkermes,Alkermes,Company,Healthcare
+E004,Amgen,Amgen,Company,Healthcare
+E004,Amgen-Allergan,Amgen,Company,Healthcare
+E005,Astra Zeneca,Astrazeneca,Company,Healthcare
+E005,Astrazeneca,Astrazeneca,Company,Healthcare
+E006,BMS,BMS,Company,Healthcare
+E007,Bayer,Bayer,Company,Healthcare
+E008,Beam Therapeutics,Beam,Company,Healthcare
+E008,Beam-101,Beam,Company,Healthcare
+E008,Beam-302,Beam,Company,Healthcare
+E008,Beam-Computed,Beam,Company,Healthcare
+E008,Beam-Curing,Beam,Company,Healthcare
+E008,Beam-Hardening,Beam,Company,Healthcare
+E008,Beam-On,Beam,Company,Healthcare
+E008,Beam-Output,Beam,Company,Healthcare
+E010,Biogen,Biogen,Company,Healthcare
+E010,Biogen-Partnered,Biogen,Company,Healthcare
+E011,Bluebird Bio,BluebirdBio,Company,Healthcare
+E012,Bms--Bristol,BristolMyersSquibb,Company,Healthcare
+E012,Bms-345541,BristolMyersSquibb,Company,Healthcare
+E012,Bms-433771-Like,BristolMyersSquibb,Company,Healthcare
+E012,Bms-477118,BristolMyersSquibb,Company,Healthcare
+E012,Bms-477188,BristolMyersSquibb,Company,Healthcare
+E012,Bms-509744,BristolMyersSquibb,Company,Healthcare
+E012,Bms-663068,BristolMyersSquibb,Company,Healthcare
+E012,Bms-707035,BristolMyersSquibb,Company,Healthcare
+E012,Bms-777607,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986012,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986020,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986036,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986104,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986158,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986205,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986253,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986258,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986263,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986278,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986340,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986360,BristolMyersSquibb,Company,Healthcare
+E012,Bms-986415,BristolMyersSquibb,Company,Healthcare
+E012,Bms-Az',BristolMyersSquibb,Company,Healthcare
+E012,Bms-Wbci,BristolMyersSquibb,Company,Healthcare
+E012,Bristol Myers Squibb,BristolMyersSquibb,Company,Healthcare
+E013,COPD,COPD,Company,Healthcare
+E014,CRISPR Therapeutics,CRISPR,Company,Healthcare
+E015,Caribou Biosciences,Caribou,Company,Healthcare
+E016,Celgene,Celgene,Company,Healthcare
+E017,Clovis Oncology,Clovis,Company,Healthcare
+E014,Crispr--Cassidy,CRISPR,Company,Healthcare
+E014,Crispr--Corrixr,CRISPR,Company,Healthcare
+E014,Crispr--Genedit,CRISPR,Company,Healthcare
+E014,Crispr--Modalis,CRISPR,Company,Healthcare
+E014,Crispr--Scribe,CRISPR,Company,Healthcare
+E014,Crispr-Aided,CRISPR,Company,Healthcare
+E014,Crispr-Associated,CRISPR,Company,Healthcare
+E014,Crispr-Based,CRISPR,Company,Healthcare
+E014,Crispr-Cas,CRISPR,Company,Healthcare
+E014,Crispr-Cas9,CRISPR,Company,Healthcare
+E014,Crispr-Cas9-Based,CRISPR,Company,Healthcare
+E014,Crispr-Cas9-Mediated,CRISPR,Company,Healthcare
+E014,Crispr-Chip,CRISPR,Company,Healthcare
+E014,Crispr-Edited,CRISPR,Company,Healthcare
+E014,Crispr-Enabled,CRISPR,Company,Healthcare
+E014,Crispr-Engineered,CRISPR,Company,Healthcare
+E014,Crispr-Gndm,CRISPR,Company,Healthcare
+E014,Crispr-Guided,CRISPR,Company,Healthcare
+E014,Crispr-Led,CRISPR,Company,Healthcare
+E014,Crispr-Licht,CRISPR,Company,Healthcare
+E014,Crispr-Mediated,CRISPR,Company,Healthcare
+E014,Crispr-Tuberculosis,CRISPR,Company,Healthcare
+E018,Editas Medicine,Editas,Company,Healthcare
+E019,Eli Lilly,EliLilly,Company,Healthcare
+E019,Eli Lilly-Partnered,EliLilly,Company,Healthcare
+E020,Epizyme,Epizyme,Company,Healthcare
+E021,GSK,Glaxosmithklin,Company,Healthcare
+E021,Gilead,Glaxosmithklin,Company,Healthcare
+E021,Glaxo SmithKline,Glaxosmithklin,Company,Healthcare
+E021,Glaxosmithkline-Led,Glaxosmithklin,Company,Healthcare
+E021,Gsk-1070806,Glaxosmithklin,Company,Healthcare
+E021,Gsk-2256098,Glaxosmithklin,Company,Healthcare
+E021,Gsk-2646264,Glaxosmithklin,Company,Healthcare
+E021,Gsk-2831781,Glaxosmithklin,Company,Healthcare
+E021,Gsk-3536852A,Glaxosmithklin,Company,Healthcare
+E021,Gsk-3772701,Glaxosmithklin,Company,Healthcare
+E021,Gsk-3888550A,Glaxosmithklin,Company,Healthcare
+E021,Gsk-3923868,Glaxosmithklin,Company,Healthcare
+E021,Gsk-3Beta,Glaxosmithklin,Company,Healthcare
+E021,Gsk-3Β,Glaxosmithklin,Company,Healthcare
+E021,Gsk-4069327A,Glaxosmithklin,Company,Healthcare
+E021,Gsk-4381562,Glaxosmithklin,Company,Healthcare
+E021,Gsk-Gulf,Glaxosmithklin,Company,Healthcare
+E021,Gsk095,Glaxosmithklin,Company,Healthcare
+E022,Immunomedics,Immunomedics,Company,Healthcare
+E023,Incyte,Incyte,Company,Healthcare
+E023,Incyte-Partnered,Incyte,Company,Healthcare
+E024,Intellia Therapeutics,Intellia,Company,Healthcare
+E027,JNJ,JohnsonAndJohnson,Company,Healthcare
+E025,Janssen,Janssen,Company,Healthcare
+E025,Janssen-Cilag,Janssen,Company,Healthcare
+E025,Janssen-Cilag',Janssen,Company,Healthcare
+E026,Jnj-0237,Johnson&Johnson,Company,Healthcare
+E026,Jnj-1330,Johnson&Johnson,Company,Healthcare
+E026,Jnj-1887,Johnson&Johnson,Company,Healthcare
+E026,Jnj-1900,Johnson&Johnson,Company,Healthcare
+E026,Jnj-2056,Johnson&Johnson,Company,Healthcare
+E026,Jnj-2113,Johnson&Johnson,Company,Healthcare
+E026,Jnj-2348,Johnson&Johnson,Company,Healthcare
+E026,Jnj-3989,Johnson&Johnson,Company,Healthcare
+E026,Jnj-40411813,Johnson&Johnson,Company,Healthcare
+E026,Jnj-4178,Johnson&Johnson,Company,Healthcare
+E026,Jnj-42165279,Johnson&Johnson,Company,Healthcare
+E026,Jnj-4528,Johnson&Johnson,Company,Healthcare
+E026,Jnj-4703,Johnson&Johnson,Company,Healthcare
+E026,Jnj-4804,Johnson&Johnson,Company,Healthcare
+E026,Jnj-5279,Johnson&Johnson,Company,Healthcare
+E026,Jnj-5322,Johnson&Johnson,Company,Healthcare
+E026,Jnj-61186372,Johnson&Johnson,Company,Healthcare
+E026,Jnj-61610588,Johnson&Johnson,Company,Healthcare
+E026,Jnj-6358,Johnson&Johnson,Company,Healthcare
+E026,Jnj-64042056,Johnson&Johnson,Company,Healthcare
+E026,Jnj-6420,Johnson&Johnson,Company,Healthcare
+E026,Jnj-64565111,Johnson&Johnson,Company,Healthcare
+E026,Jnj-64619178,Johnson&Johnson,Company,Healthcare
+E026,Jnj-67571244,Johnson&Johnson,Company,Healthcare
+E026,Jnj-68284528,Johnson&Johnson,Company,Healthcare
+E026,Jnj-78436735,Johnson&Johnson,Company,Healthcare
+E026,Jnj-7922,Johnson&Johnson,Company,Healthcare
+E026,Jnj-8543,Johnson&Johnson,Company,Healthcare
+E026,Jnj-8942,Johnson&Johnson,Company,Healthcare
+E026,Jnj-927,Johnson&Johnson,Company,Healthcare
+E026,Johnson & Johnson,Johnson&Johnson,Company,Healthcare
+E026,johnson johnson,Johnson&Johnson,Company,Healthcare
+E028,Kymera Therapeutics,Kymera,Company,Healthcare
+E019,Lilly,EliLilly,Company,Healthcare
+E019,Lilly-Partnered,EliLilly,Company,Healthcare
+E019,Lillydirect,EliLilly,Company,Healthcare
+E029,Merck,Merck,Company,Healthcare
+E029,Merck-Schering,Merck,Company,Healthcare
+E030,Moderna,Moderna,Company,Healthcare
+E030,Moderna-Partnered,Moderna,Company,Healthcare
+E030,Moderna-Vaccinated,Moderna,Company,Healthcare
+E030,Moderna',Moderna,Company,Healthcare
+E031,MorphoSys,MorphoSys,Company,Healthcare
+E032,Myokardia,Myokardia,Company,Healthcare
+E033,Neurocrine,Neurocrine,Company,Healthcare
+E034,Novartis,Novartis,Company,Healthcare
+E034,Novartis--Are,Novartis,Company,Healthcare
+E034,Novartis-Mit,Novartis,Company,Healthcare
+E034,Novartis-Partnered,Novartis,Company,Healthcare
+E035,Novartisat,Novartisat,Company,Healthcare
+E037,Novo Nordisk,NovoNordisk,Company,Healthcare
+E038,Pfizer,Pfizer,Company,Healthcare
+E038,Pfizer-Allergan,Pfizer,Company,Healthcare
+E038,Pfizer-Biontech,Pfizer,Company,Healthcare
+E038,Pfizer-Wyeth,Pfizer,Company,Healthcare
+E039,Reata Pharmaceuticals,ReataPharmaceuticals,Company,Healthcare
+E040,Regeneron,Regeneron,Company,Healthcare
+E041,Roche,Roche,Company,Healthcare
+E041,Roche'Genentech',Roche,Company,Healthcare
+E041,Roche-Owned,Roche,Company,Healthcare
+E041,Roche-Part,Roche,Company,Healthcare
+E041,Roche-Partnered,Roche,Company,Healthcare
+E042,Roches',Roches',Company,Healthcare
+E043,Sage Therapeutics,SageTherapeutics,Company,Healthcare
+E043,Sage-217,SageTherapeutics,Company,Healthcare
+E043,Sage-324,SageTherapeutics,Company,Healthcare
+E043,Sage-718,SageTherapeutics,Company,Healthcare
+E043,Sage-Based,SageTherapeutics,Company,Healthcare
+E044,Sanofi,Sanofi,Company,Healthcare
+E044,Sanofi-Aventis,Sanofi,Company,Healthcare
+E044,Sanofi-Aventis',Sanofi,Company,Healthcare
+E044,Sanofi-Genzyme,Sanofi,Company,Healthcare
+E044,Sanofi-Licensed,Sanofi,Company,Healthcare
+E044,Sanofi-Owned,Sanofi,Company,Healthcare
+E044,Sanofi-Part,Sanofi,Company,Healthcare
+E044,Sanofi-Partnered,Sanofi,Company,Healthcare
+E044,Sanofi-Pasteur,Sanofi,Company,Healthcare
+E044,Sanofi-Regeneron,Sanofi,Company,Healthcare
+E044,Sanofi-Synthlabo,Sanofi,Company,Healthcare
+E044,Sanofi-Synthélabo',Sanofi,Company,Healthcare
+E045,Sarepta Therapeutics,SareptaTherapeutics,Company,Healthcare
+E046,Sarepta Therapeutics',SareptaTherapeutics',Company,Healthcare
+E047,Seagen,Seagen,Company,Healthcare
+E048,Spark Therapeutics,SparkTherapeutics,Company,Healthcare
+E049,Spark Therapeutics',SparkTherapeutics',Company,Healthcare
+E050,Tesaro,Tesaro,Company,Healthcare
+E051,Teva,Teva,Company,Healthcare
+E052,Vertex,Vertex,Company,Healthcare
+E053,Wave Life Sciences,Wave,Company,Healthcare
+E054,Xenon Pharmaceuticals,XenonPharmaceuticals,Company,Healthcare
+E036,novavax,Novavax,Company,Healthcare
+E009,biontech,BioNTech,Company,Healthcare
