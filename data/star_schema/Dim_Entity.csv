@@ -1,0 +1,196 @@
+Entity_Key,Entity_Name,Entity_Type,Entity_Domain
+200,AbbVie,Company,Healthcare
+201,Abbvie-Allergan,Company,Healthcare
+202,Abbvie-Partnered,Company,Healthcare
+203,Alexion,Company,Healthcare
+204,Alexion-Achillion,Company,Healthcare
+205,Alkermes,Company,Healthcare
+206,Amgen,Company,Healthcare
+207,Amgen-Allergan,Company,Healthcare
+208,Astra Zeneca,Company,Healthcare
+209,Astrazeneca-Partnered,Company,Healthcare
+210,BMS,Company,Healthcare
+211,Bayer,Company,Healthcare
+212,Beam Therapeutics,Company,Healthcare
+213,Beam-101,Company,Healthcare
+214,Beam-302,Company,Healthcare
+215,Beam-Computed,Company,Healthcare
+216,Beam-Curing,Company,Healthcare
+217,Beam-Hardening,Company,Healthcare
+218,Beam-On,Company,Healthcare
+219,Beam-Output,Company,Healthcare
+220,Biogen,Company,Healthcare
+221,Biogen-Partnered,Company,Healthcare
+222,Bluebird Bio,Company,Healthcare
+223,Bms--Bristol,Company,Healthcare
+224,Bms-345541,Company,Healthcare
+225,Bms-433771-Like,Company,Healthcare
+226,Bms-477118,Company,Healthcare
+227,Bms-477188,Company,Healthcare
+228,Bms-509744,Company,Healthcare
+229,Bms-663068,Company,Healthcare
+230,Bms-707035,Company,Healthcare
+231,Bms-777607,Company,Healthcare
+232,Bms-986012,Company,Healthcare
+233,Bms-986020,Company,Healthcare
+234,Bms-986036,Company,Healthcare
+235,Bms-986104,Company,Healthcare
+236,Bms-986158,Company,Healthcare
+237,Bms-986205,Company,Healthcare
+238,Bms-986253,Company,Healthcare
+239,Bms-986258,Company,Healthcare
+240,Bms-986263,Company,Healthcare
+241,Bms-986278,Company,Healthcare
+242,Bms-986340,Company,Healthcare
+243,Bms-986360,Company,Healthcare
+244,Bms-986415,Company,Healthcare
+245,Bms-Az',Company,Healthcare
+246,Bms-Wbci,Company,Healthcare
+247,Bristol Myers Squibb,Company,Healthcare
+248,COPD,Company,Healthcare
+249,CRISPR Therapeutics,Company,Healthcare
+250,Caribou Biosciences,Company,Healthcare
+251,Celgene,Company,Healthcare
+252,Clovis Oncology,Company,Healthcare
+253,Crispr--Cassidy,Company,Healthcare
+254,Crispr--Corrixr,Company,Healthcare
+255,Crispr--Genedit,Company,Healthcare
+256,Crispr--Modalis,Company,Healthcare
+257,Crispr--Scribe,Company,Healthcare
+258,Crispr-Aided,Company,Healthcare
+259,Crispr-Associated,Company,Healthcare
+260,Crispr-Based,Company,Healthcare
+261,Crispr-Cas,Company,Healthcare
+262,Crispr-Cas9,Company,Healthcare
+263,Crispr-Cas9-Based,Company,Healthcare
+264,Crispr-Cas9-Mediated,Company,Healthcare
+265,Crispr-Chip,Company,Healthcare
+266,Crispr-Edited,Company,Healthcare
+267,Crispr-Enabled,Company,Healthcare
+268,Crispr-Engineered,Company,Healthcare
+269,Crispr-Gndm,Company,Healthcare
+270,Crispr-Guided,Company,Healthcare
+271,Crispr-Led,Company,Healthcare
+272,Crispr-Licht,Company,Healthcare
+273,Crispr-Mediated,Company,Healthcare
+274,Crispr-Tuberculosis,Company,Healthcare
+275,Editas Medicine,Company,Healthcare
+276,Eli Lilly,Company,Healthcare
+277,Eli Lilly-Partnered,Company,Healthcare
+278,Epizyme,Company,Healthcare
+279,GSK,Company,Healthcare
+280,Gilead,Company,Healthcare
+281,Glaxo SmithKline,Company,Healthcare
+282,Glaxosmithkline-Led,Company,Healthcare
+283,Gsk-1070806,Company,Healthcare
+284,Gsk-2256098,Company,Healthcare
+285,Gsk-2646264,Company,Healthcare
+286,Gsk-2831781,Company,Healthcare
+287,Gsk-3536852A,Company,Healthcare
+288,Gsk-3772701,Company,Healthcare
+289,Gsk-3888550A,Company,Healthcare
+290,Gsk-3923868,Company,Healthcare
+291,Gsk-3Beta,Company,Healthcare
+292,Gsk-3Β,Company,Healthcare
+293,Gsk-4069327A,Company,Healthcare
+294,Gsk-4381562,Company,Healthcare
+295,Gsk-Gulf,Company,Healthcare
+296,Gsk095,Company,Healthcare
+297,HIV,Company,Healthcare
+298,Immunomedics,Company,Healthcare
+299,Incyte,Company,Healthcare
+300,Incyte-Partnered,Company,Healthcare
+301,Intellia Therapeutics,Company,Healthcare
+302,JNJ,Company,Healthcare
+303,Janssen,Company,Healthcare
+304,Janssen-Cilag,Company,Healthcare
+305,Janssen-Cilag',Company,Healthcare
+306,Jnj-0237,Company,Healthcare
+307,Jnj-1330,Company,Healthcare
+308,Jnj-1887,Company,Healthcare
+309,Jnj-1900,Company,Healthcare
+310,Jnj-2056,Company,Healthcare
+311,Jnj-2113,Company,Healthcare
+312,Jnj-2348,Company,Healthcare
+313,Jnj-3989,Company,Healthcare
+314,Jnj-40411813,Company,Healthcare
+315,Jnj-4178,Company,Healthcare
+316,Jnj-42165279,Company,Healthcare
+317,Jnj-4528,Company,Healthcare
+318,Jnj-4703,Company,Healthcare
+319,Jnj-4804,Company,Healthcare
+320,Jnj-5279,Company,Healthcare
+321,Jnj-5322,Company,Healthcare
+322,Jnj-61186372,Company,Healthcare
+323,Jnj-61610588,Company,Healthcare
+324,Jnj-6358,Company,Healthcare
+325,Jnj-64042056,Company,Healthcare
+326,Jnj-6420,Company,Healthcare
+327,Jnj-64565111,Company,Healthcare
+328,Jnj-64619178,Company,Healthcare
+329,Jnj-67571244,Company,Healthcare
+330,Jnj-68284528,Company,Healthcare
+331,Jnj-78436735,Company,Healthcare
+332,Jnj-7922,Company,Healthcare
+333,Jnj-8543,Company,Healthcare
+334,Jnj-8942,Company,Healthcare
+335,Jnj-927,Company,Healthcare
+336,Johnson & Johnson,Company,Healthcare
+337,Kymera Therapeutics,Company,Healthcare
+338,Lilly,Company,Healthcare
+339,Lilly-Partnered,Company,Healthcare
+340,Lillydirect,Company,Healthcare
+341,Merck,Company,Healthcare
+342,Merck-Schering,Company,Healthcare
+343,Moderna,Company,Healthcare
+344,Moderna-Partnered,Company,Healthcare
+345,Moderna-Vaccinated,Company,Healthcare
+346,MorphoSys,Company,Healthcare
+347,Myokardia,Company,Healthcare
+348,Neurocrine,Company,Healthcare
+349,Novartis,Company,Healthcare
+350,Novartis--Are,Company,Healthcare
+351,Novartis-Mit,Company,Healthcare
+352,Novartis-Partnered,Company,Healthcare
+353,Novartisat,Company,Healthcare
+354,Novo Nordisk,Company,Healthcare
+355,Pfizer,Company,Healthcare
+356,Pfizer-Allergan,Company,Healthcare
+357,Pfizer-Biontech,Company,Healthcare
+358,Pfizer-Wyeth,Company,Healthcare
+359,Reata Pharmaceuticals,Company,Healthcare
+360,Regeneron,Company,Healthcare
+361,Rheumatoid Arthritis,Company,Healthcare
+362,Roche,Company,Healthcare
+363,Roche'Genentech',Company,Healthcare
+364,Roche-Owned,Company,Healthcare
+365,Roche-Part,Company,Healthcare
+366,Roche-Partnered,Company,Healthcare
+367,Roches',Company,Healthcare
+368,Sage Therapeutics,Company,Healthcare
+369,Sage-217,Company,Healthcare
+370,Sage-324,Company,Healthcare
+371,Sage-718,Company,Healthcare
+372,Sage-Based,Company,Healthcare
+373,Sanofi,Company,Healthcare
+374,Sanofi-Aventis,Company,Healthcare
+375,Sanofi-Aventis',Company,Healthcare
+376,Sanofi-Genzyme,Company,Healthcare
+377,Sanofi-Licensed,Company,Healthcare
+378,Sanofi-Owned,Company,Healthcare
+379,Sanofi-Part,Company,Healthcare
+380,Sanofi-Partnered,Company,Healthcare
+381,Sanofi-Pasteur,Company,Healthcare
+382,Sanofi-Regeneron,Company,Healthcare
+383,Sanofi-Synthlabo,Company,Healthcare
+384,Sanofi-Synthélabo',Company,Healthcare
+385,Sarepta Therapeutics,Company,Healthcare
+386,Sarepta Therapeutics',Company,Healthcare
+387,Seagen,Company,Healthcare
+388,Spark Therapeutics,Company,Healthcare
+389,Spark Therapeutics',Company,Healthcare
+390,Tesaro,Company,Healthcare
+391,Teva,Company,Healthcare
+392,Vertex,Company,Healthcare
+393,Wave Life Sciences,Company,Healthcare
+394,Xenon Pharmaceuticals,Company,Healthcare

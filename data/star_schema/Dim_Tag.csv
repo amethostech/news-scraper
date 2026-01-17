@@ -1,0 +1,46 @@
+Tag_Key,Tag_Name,Tag_Category,Tag_Domain
+10,acquisition,Event,Business
+11,merger,Event,Business
+12,partnership,Event,Business
+13,collaboration,Event,Business
+14,licensing,Event,Business
+15,buyout,Event,Business
+16,takeover,Event,Business
+17,biotech deal,Event,Business
+18,pharma deal,Event,Business
+19,M&A  (mergers & acquisitions),Event,Business
+20,alliance,Event,Business
+21,option agreement,Event,Business
+22,co-development,Event,Business
+23,in-license  /  out-license,Event,Business
+24,clinical stage,Clinical,Healthcare
+25,Phase 2  /  Phase 3,Clinical,Healthcare
+26,FDA approval,Clinical,Healthcare
+27,funding,Event,Business
+28,financing,Event,Business
+29,investment,Event,Business
+30,raises,Event,Business
+31,series a  /  series b  /  series c,Event,Business
+32,c round,Event,Business
+33,seriesc,Event,Business
+34,series c,Event,Business
+35,venture capital  or  VC,Event,Business
+36,IPO,Event,Business
+37,private placement,Event,Business
+38,round  (as in  funding round ),Event,Business
+39,capital raise,Other,General
+40,oversubscribed  (indicates strong investor interest),Event,Business
+41,seed funding,Event,Business
+42,crossover round,Event,Business
+43,PIPE  (Private Investment in Public Equity),Event,Business
+44,dilutive financing  /  non-dilutive funding,Event,Business
+45,non-dilutive financing,Event,Business
+46,dilutive financing,Event,Business
+47,led by  (often precedes lead investor names),Event,Business
+48,participated,Event,Business
+49,syndicate,Event,Business
+50,biotech funding,Event,Business
+51,preclinical,Entity,Healthcare
+52,clinical-stage,Clinical,Healthcare
+53,platform company,Entity,Healthcare
+54,therapeutic,Entity,Healthcare
