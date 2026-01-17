@@ -23,8 +23,8 @@ data/
 !normalization_rules.csv
 !*_index.csv
 !Entity_input.csv
-!data/star_schema/
-!NewStockData/data/
+!data/star_schema/*.csv
+!NewStockData/data/*.csv
 
 # System
 .DS_Store
